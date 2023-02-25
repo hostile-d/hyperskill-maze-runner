@@ -21,3 +21,14 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+.gradle
+.idea
+Maze Runner/A way out
+Maze Runner/Display a maze
+Maze Runner/Maze generator
+Maze Runner/Saved and loaded
+Maze Runner/task/build
+Maze Runner/lesson-info.yaml
+Topics
+course-info.yaml
+course-remote-info.yaml
