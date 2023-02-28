@@ -1,6 +1,8 @@
 package maze;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class Maze {
     private int height;
@@ -9,36 +11,39 @@ public class Maze {
     private final String WALL = "██";
     private final int WALL_WIDTH_TOTAL = 2;
     private Integer[][] graph;
+    private ArrayList<String> printedMaze = new ArrayList<>();
 
-    public Maze(int height, int width) {
+    public Maze(int height, Optional<Integer> width) {
         this.height = height - WALL_WIDTH_TOTAL;
-        this.width = width - WALL_WIDTH_TOTAL;
+        this.width = width.map(integer -> integer - WALL_WIDTH_TOTAL).orElseGet(() -> this.height);
         var fabric = new GraphFabric(getSizeInGraph(this.height), getSizeInGraph(this.width));
         fabric.getGraph();
         fabric.buildMST();
         graph = fabric.getCleanedGraph();
-        print(graph);
     }
 
-    public void print(Integer[][] matrix) {
-        System.out.println(WALL.repeat(width + WALL_WIDTH_TOTAL));
+    public void makePrintable() {
+        printedMaze.add(WALL.repeat(width + WALL_WIDTH_TOTAL));
 
         for (int i = 0; i < height; i++) {
             String[] row = new String[width];
             for (int j = 0; j < width; j++) {
                 boolean isNodeHere = i % 2 == 0 && j % 2 == 0;
-                if (isNodeHere || isEdgeHere(matrix, j, i)) {
+                if (isNodeHere || isEdgeHere(graph, j, i)) {
                     row[j] = PASSAGE;
                     continue;
                 }
 
                 row[j] = WALL;
             }
-            System.out.println(getInnerLine(row, i));
+            printedMaze.add(getInnerLine(row, i));
         }
 
+        printedMaze.add(WALL.repeat(width + WALL_WIDTH_TOTAL));
+    }
 
-        System.out.println(WALL.repeat(width + WALL_WIDTH_TOTAL));
+    public ArrayList<String> getPrintedMaze() {
+        return this.printedMaze;
     }
 
     public String getInnerLine (String[] row, int index) {
